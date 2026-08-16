@@ -34,8 +34,6 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
 }) => {
   const [selectedBranch, setSelectedBranch] = useState<string>(RIYADH_BRANCHES[0]);
   const [selectedBuildingId, setSelectedBuildingId] = useState<string>('');
-  const [customBuildingName, setCustomBuildingName] = useState<string>('');
-  const [district, setDistrict] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [photoUrl, setPhotoUrl] = useState<string>('');
@@ -49,8 +47,11 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const finalBuildingName = currentBuilding ? currentBuilding.name : (customBuildingName.trim() || 'عقار القاسم بالرياض');
-    const finalDistrict = currentBuilding ? (currentBuilding.district || 'الرياض') : (district.trim() || 'الرياض');
+
+    if (!currentBuilding) {
+      alert('يرجى اختيار العقار من القائمة أولاً');
+      return;
+    }
 
     if (!title.trim() || !description.trim()) {
       alert('يرجى كتابة عنوان التقرير والتفاصيل');
@@ -59,10 +60,10 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
 
     setLoading(true);
     const res = await onSubmitReport({
-      buildingId: currentBuilding?.id || 'bldg-custom',
-      buildingName: finalBuildingName,
+      buildingId: currentBuilding.id,
+      buildingName: currentBuilding.name,
       branch: selectedBranch,
-      district: finalDistrict,
+      district: currentBuilding.district || 'الرياض',
       title: title.trim(),
       description: description.trim(),
       photoUrl: photoUrl.trim() || undefined,
@@ -79,8 +80,6 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
 
   const resetAndClose = () => {
     setSelectedBuildingId('');
-    setCustomBuildingName('');
-    setDistrict('');
     setTitle('');
     setDescription('');
     setPhotoUrl('');
@@ -144,7 +143,7 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
             {/* Select or Enter Building */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                اسم العقار / المبنى
+                اسم العقار / المبنى <span className="text-rose-500">*</span>
               </label>
               {branchBuildings.length > 0 ? (
                 <div className="grid grid-cols-1 gap-1.5 max-h-32 overflow-y-auto pr-1 mb-2">
@@ -155,7 +154,6 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
                         key={bldg.id}
                         onClick={() => {
                           setSelectedBuildingId(bldg.id);
-                          setCustomBuildingName('');
                         }}
                         className={`p-2 rounded-xl border transition cursor-pointer flex items-center justify-between text-xs ${
                           isSelected 
@@ -172,34 +170,12 @@ export const NewReportModal: React.FC<NewReportModalProps> = ({
                     );
                   })}
                 </div>
-              ) : null}
-
-              {!selectedBuildingId && (
-                <div>
-                  <input
-                    type="text"
-                    value={customBuildingName}
-                    onChange={(e) => setCustomBuildingName(e.target.value)}
-                    placeholder="اكتب اسم العقار (مثال: عمارة القاسم - الياسمين 12)"
-                    className="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:border-indigo-600 bg-slate-50 text-slate-900 font-medium"
-                  />
+              ) : (
+                <div className="p-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl text-center">
+                  لا توجد عقارات مسجلة في هذا الفرع. يرجى مراجعة إدارة النظام.
                 </div>
               )}
             </div>
-
-            {/* District */}
-            {!currentBuilding && (
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">الحي بالرياض</label>
-                <input
-                  type="text"
-                  value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
-                  placeholder="مثال: حي الياسمين"
-                  className="w-full p-2.5 text-xs border border-slate-200 rounded-xl outline-none focus:border-indigo-600 bg-slate-50 text-slate-900 font-medium"
-                />
-              </div>
-            )}
 
             {/* Title */}
             <div>

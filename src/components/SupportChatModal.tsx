@@ -144,8 +144,7 @@ export const SupportChatModal: React.FC<SupportChatModalProps> = ({
     const messagesRef = collection(db, 'support_messages');
     const qMessages = query(
       messagesRef, 
-      where('threadId', '==', targetUid), 
-      orderBy('createdAt', 'asc')
+      where('threadId', '==', targetUid)
     );
 
     const unsubscribeMessages = onSnapshot(qMessages, (snapshot) => {
@@ -163,6 +162,9 @@ export const SupportChatModal: React.FC<SupportChatModalProps> = ({
           isAdmin: !!data.isAdmin,
         });
       });
+      // Sort client-side to avoid requiring a composite index in Firestore
+      loaded.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      
       setMessages(loaded);
     }, (err) => {
       console.warn('Chat messages snapshot notice:', err);

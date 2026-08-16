@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PropertyReport, Building, RIYADH_BRANCHES, ReportStatus } from '../types';
-import { X, Edit3, Save, Upload, Trash2, Camera } from 'lucide-react';
+import { X, Edit3, Save, Upload, Trash2, Camera, Building2, Check } from 'lucide-react';
 
 interface EditReportModalProps {
   report: PropertyReport | null;
@@ -52,22 +52,26 @@ export const EditReportModal: React.FC<EditReportModalProps> = ({
 
   if (!isOpen || !report) return null;
 
+  const branchBuildings = buildings.filter(b => b.branch === selectedBranch);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
 
     const currentBldg = buildings.find(b => b.id === selectedBuildingId);
-    const finalBuildingName = currentBldg ? currentBldg.name : buildingName.trim();
-    const finalDistrict = currentBldg ? currentBldg.district : district.trim();
+    if (!currentBldg) {
+      alert('يرجى اختيار العقار من القائمة أولاً');
+      return;
+    }
 
     setLoading(true);
     await onSaveReport({
       id: report.id,
       title: title.trim(),
-      buildingId: selectedBuildingId || report.buildingId,
-      buildingName: finalBuildingName || report.buildingName,
+      buildingId: currentBldg.id,
+      buildingName: currentBldg.name,
       branch: selectedBranch,
-      district: finalDistrict,
+      district: currentBldg.district || 'الرياض',
       description: description.trim(),
       status,
       photoUrl: photoUrl.trim() || undefined,
@@ -150,13 +154,51 @@ export const EditReportModal: React.FC<EditReportModalProps> = ({
             <label className="block text-xs font-bold text-slate-700 mb-1">الفرع</label>
             <select
               value={selectedBranch}
-              onChange={(e) => setSelectedBranch(e.target.value)}
+              onChange={(e) => {
+                setSelectedBranch(e.target.value);
+                setSelectedBuildingId('');
+              }}
               className="w-full p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl font-bold text-indigo-900 outline-none"
             >
               {RIYADH_BRANCHES.map(br => (
                 <option key={br} value={br}>{br}</option>
               ))}
             </select>
+          </div>
+
+          {/* Select Building */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1">
+              اسم العقار / المبنى <span className="text-rose-500">*</span>
+            </label>
+            {branchBuildings.length > 0 ? (
+              <div className="grid grid-cols-1 gap-1.5 max-h-32 overflow-y-auto pr-1 mb-2">
+                {branchBuildings.map(bldg => {
+                  const isSelected = selectedBuildingId === bldg.id;
+                  return (
+                    <div
+                      key={bldg.id}
+                      onClick={() => setSelectedBuildingId(bldg.id)}
+                      className={`p-2 rounded-xl border transition cursor-pointer flex items-center justify-between text-xs ${
+                        isSelected 
+                          ? 'bg-indigo-50 border-indigo-600 font-bold text-indigo-900' 
+                          : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-indigo-600" />
+                        <span>{bldg.name}</span>
+                      </div>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600" />}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="p-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl text-center">
+                لا توجد عقارات مسجلة في هذا الفرع. يرجى مراجعة إدارة النظام.
+              </div>
+            )}
           </div>
 
           {/* Description */}
