@@ -8,6 +8,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   updatePassword,
   updateEmail,
   User as FirebaseUser
@@ -55,6 +57,8 @@ export {
   sendEmailVerification, 
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   updatePassword,
   updateEmail,
   collection, 
