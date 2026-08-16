@@ -1,12 +1,12 @@
 {
-  "projectId": "citric-phenomenon-f7854",
-  "appId": "1:861861448789:web:19627ed12a42279a4218dc",
-  "apiKey": "AIzaSyBd9q2uMl7WyADoGHukxnLJjmTHGOogu3E",
-  "authDomain": "citric-phenomenon-f7854.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-1000-09c4c1e4-8d76-4129-9b35-bd18d8ca7557",
-  "storageBucket": "citric-phenomenon-f7854.firebasestorage.app",
-  "messagingSenderId": "861861448789",
-  "measurementId": "",
-  "oAuthClientId": "861861448789-d106s0hksuf7k1mioafe64p2tok5i55n.apps.googleusercontent.com",
+  "projectId": "project-1132704863933936078",
+  "appId": "1:926948791743:web:b1ae6191ad968b1bb53d0a",
+  "apiKey": "AIzaSyB04L6w4b-eNzt7bietAaTF6rkp4_9Fp88",
+  "authDomain": "project-1132704863933936078.firebaseapp.com",
+  "firestoreDatabaseId": "",
+  "storageBucket": "project-1132704863933936078.firebasestorage.app",
+  "messagingSenderId": "926948791743",
+  "measurementId": "G-0YQYKJ6CFZ",
+  "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
