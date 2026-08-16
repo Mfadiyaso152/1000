@@ -97,12 +97,6 @@ export default function App() {
   useEffect(() => {
     let unsubscribeUserDoc: (() => void) | null = null;
 
-    // Check for redirect errors (the user is picked up by onAuthStateChanged if successful)
-    getRedirectResult(auth).catch((err) => {
-      console.error('Redirect result error:', err);
-      setAuthError('تعذر تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-    });
-
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       setFirebaseUser(user);
 
@@ -222,10 +216,11 @@ export default function App() {
   const handleGoogleSignIn = async () => {
     setAuthError(null);
     try {
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
     } catch (err: any) {
       console.warn('Google sign in error:', err);
-      setAuthError('حدث خطأ أثناء بدء تسجيل الدخول بواسطة Google. يرجى المحاولة مرة أخرى.');
+      // Show the exact error message so we know what's wrong (e.g. unauthorized domain)
+      setAuthError(`حدث خطأ: ${err.message || err.code || 'يرجى المحاولة مرة أخرى'}`);
     }
   };
 
