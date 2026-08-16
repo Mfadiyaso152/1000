@@ -1,0 +1,6 @@
+{
+  "name": "1000 القاسم",
+  "description": "تطبيق 1000 القاسم لإدارة تقارير وطلبات سقي المياه للعقارات بالرياض",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

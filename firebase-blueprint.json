@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "users": {
+      "title": "Users",
+      "description": "User account details including role and verification status",
+      "properties": {
+        "uid": { "type": "string", "description": "User ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "name": { "type": "string", "description": "User full name" },
+        "role": { "type": "string", "description": "User role: employee or manager" },
+        "createdAt": { "type": "string", "description": "ISO creation date" }
+      },
+      "required": ["uid", "email", "name", "role"]
+    },
+    "buildings": {
+      "title": "Buildings",
+      "description": "Riyadh company buildings and branches",
+      "properties": {
+        "name": { "type": "string", "description": "Building name or number" },
+        "branch": { "type": "string", "description": "Riyadh branch name" },
+        "locationUrl": { "type": "string", "description": "Google Maps link" },
+        "imageUrl": { "type": "string", "description": "Building image URL" },
+        "waterStatus": { "type": "string", "description": "Status: normal or empty" }
+      },
+      "required": ["name", "branch"]
+    },
+    "water_requests": {
+      "title": "Water Requests",
+      "description": "Water refill requests pipeline",
+      "properties": {
+        "buildingId": { "type": "string", "description": "Building reference ID" },
+        "buildingName": { "type": "string", "description": "Building name" },
+        "branch": { "type": "string", "description": "Branch name" },
+        "locationUrl": { "type": "string", "description": "Google Maps link" },
+        "buildingImageUrl": { "type": "string", "description": "Building photo" },
+        "status": { "type": "string", "description": "pending_manager | manager_approved | completed | rejected" },
+        "requestedByUid": { "type": "string", "description": "Requestor User ID" },
+        "requestedByName": { "type": "string", "description": "Requestor Name" },
+        "requestedAt": { "type": "string", "description": "Timestamp ISO" },
+        "approvedByUid": { "type": "string", "description": "Approver User ID" },
+        "approvedByName": { "type": "string", "description": "Approver Name" },
+        "approvedAt": { "type": "string", "description": "Approval timestamp" },
+        "cost": { "type": "number", "description": "Refill cost in SAR" },
+        "photoBefore": { "type": "string", "description": "Tank photo before refill" },
+        "photoAfter": { "type": "string", "description": "Tank photo after refill" },
+        "completedAt": { "type": "string", "description": "Completion timestamp" },
+        "notes": { "type": "string", "description": "Additional notes" }
+      },
+      "required": ["buildingName", "branch", "status", "requestedByName"]
+    }
+  }
+}
